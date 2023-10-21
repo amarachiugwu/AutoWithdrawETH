@@ -1,32 +1,22 @@
 require('dotenv').config();
 const ethers = require('ethers');
-const contractAbi = require('./contract.json');
-const usdtContractAbi = require('./usdtContract.json');
 
 const privateKey = process.env.PRIVATEKEY;
 const infuraApiKey = process.env.INFURA_API_KEY;
 const alchemyApiKey = process.env.ALCHEMY_API_KEY;
-const contractAddress = process.env.CONTRACT_ADDRESS;
 const ethereumAddress = process.env.ETHEREUM_ADDRESS;
-const usdtContractAddress = process.env.USDT_CONTRACT_ADDRESS; // Address of the USDT token contract
-const decimals = process.env.DECIMAL;
 const reciever = process.env.RECIEVER;
 
-// const provider =  new ethers.InfuraProvider("sepolia",infuraApiKey);
-const provider =  new ethers.AlchemyProvider("sepolia",alchemyApiKey);
+// const provider =  new ethers.InfuraProvider("mainnet",infuraApiKey);
+const provider =  new ethers.AlchemyProvider("mainnet",alchemyApiKey);
 
 
 const wallet = new ethers.Wallet(privateKey, provider);
 
-const contract = new ethers.Contract(contractAddress, contractAbi.abi, wallet);
-const usdtContract = new ethers.Contract(usdtContractAddress, usdtContractAbi.abi, wallet);
-
 
 
 async function main() {
-  const filter = {
-    address: ethereumAddress,
-  };
+  
 
 
   provider.on('block', async (blockNumber) => {
